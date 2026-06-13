@@ -1,0 +1,194 @@
+[
+  {
+    "id": "evt_1977_01",
+    "date": "1977-01-01",
+    "title": "Late-1970s Stagflation Phase",
+    "description": "CPI above 6% with simultaneous GDP stagnation. Fed under Burns maintaining loose policy. Post-1973 oil shock pressures persisting. Wage-price spiral developing.",
+    "assets": ["^GSPC", "^TNX", "GC=F"],
+    "what_happened": "Fed delayed tightening, allowing inflation to entrench. CPI accelerated to 14.8% by 1980. Equities declined steadily through 1977-1978. Gold surged as primary inflation hedge."
+  },
+  {
+    "id": "evt_1979_10",
+    "date": "1979-10-06",
+    "title": "Volcker Shock",
+    "description": "Fed Chair Volcker announces shift to monetary base targeting. Inflation running at 12%. Aggressive rate hikes signalled. Surprise policy pivot catching markets off guard.",
+    "assets": ["^GSPC", "^TNX", "GC=F"],
+    "what_happened": "Rates ultimately reached 20% by 1981. Two recessions followed. Gold spiked to $850 in January 1980 before collapsing. Inflation broken by 1983 at significant economic cost."
+  },
+  {
+    "id": "evt_1987_10",
+    "date": "1987-10-19",
+    "title": "Black Monday",
+    "description": "Dow Jones drops 22.6% in single session. Program trading and portfolio insurance amplifying selling. Rising rates and overvalued equities as backdrop.",
+    "assets": ["^GSPC", "^TNX", "GC=F"],
+    "what_happened": "Largest single-day Dow percentage drop in history. Fed injected liquidity immediately. No recession followed. Equities largely recovered within 18 months. Portfolio insurance strategies abandoned."
+  },
+  {
+    "id": "evt_1990_08",
+    "date": "1990-08-02",
+    "title": "Gulf War Oil Shock",
+    "description": "Iraq invades Kuwait. Oil spikes from $17 to $36 per barrel. US economy already weakening. Consumer confidence collapsing. Fed balancing inflation against recession risk.",
+    "assets": ["^GSPC", "^TNX", "GC=F"],
+    "what_happened": "US entered recession Q3 1990. Equities fell 20% peak to trough. Oil spike proved temporary after Gulf War ended February 1991. Sharp recovery followed."
+  },
+  {
+    "id": "evt_1994_02",
+    "date": "1994-02-04",
+    "title": "Fed Surprise Rate Hike",
+    "description": "Fed raises rates 25bps — first hike in five years. Markets completely unprepared. Beginning of aggressive tightening cycle. Global bond market selloff triggered immediately.",
+    "assets": ["^GSPC", "^TNX", "GC=F"],
+    "what_happened": "10-year yields rose 250bps over 1994. One of the worst post-war bond market selloffs. Equities volatile but resilient. No recession. Economy grew strongly in 1995."
+  },
+  {
+    "id": "evt_1997_07",
+    "date": "1997-07-02",
+    "title": "Asian Financial Crisis Inception",
+    "description": "Thai baht collapses after abandoning dollar peg. Contagion spreading to Malaysia, Indonesia, South Korea. Sovereign debt stress across emerging Asia. Dollar strengthening sharply.",
+    "assets": ["^GSPC", "^TNX", "GC=F"],
+    "what_happened": "Asian economies contracted severely. IMF bailouts required. US equities initially resilient and continued rallying. Dollar safe haven demand surged. Gold weakened as dollar strengthened."
+  },
+  {
+    "id": "evt_1998_08",
+    "date": "1998-08-17",
+    "title": "Russia Default and LTCM Collapse",
+    "description": "Russia defaults on domestic debt and devalues ruble. LTCM facing collapse with $125 billion in assets and extreme leverage. Credit markets seizing globally.",
+    "assets": ["^GSPC", "^TNX", "GC=F"],
+    "what_happened": "Fed organised LTCM bailout and cut rates three times. Equities fell 20% peak to trough then recovered sharply into year end. Credit spreads spiked before normalising."
+  },
+  {
+    "id": "evt_2000_03",
+    "date": "2000-03-10",
+    "title": "Dot-Com Peak",
+    "description": "Nasdaq reaches 5048 all-time high. Technology valuations at extreme multiples disconnected from fundamentals. Fed raising rates since 1999. IPO frenzy at peak.",
+    "assets": ["^GSPC", "^TNX", "GC=F", "SPY"],
+    "what_happened": "Nasdaq fell 78% over 30 months. S&P 500 fell 49%. Recession in 2001. Technology sector took a decade to recover prior highs."
+  },
+  {
+    "id": "evt_2001_09",
+    "date": "2001-09-11",
+    "title": "September 11 Attacks",
+    "description": "Terrorist attacks on World Trade Center and Pentagon. Equity markets closed four trading days. Economy already in recession. Consumer confidence collapsing.",
+    "assets": ["^GSPC", "^TNX", "GC=F", "SPY"],
+    "what_happened": "Markets reopened September 17 with Dow falling 7.1%. Fed cut rates to 1.75% by year end. Economic activity stabilised but equities continued declining into October 2002."
+  },
+  {
+    "id": "evt_2003_03",
+    "date": "2003-03-12",
+    "title": "Iraq War — Pre-Invasion Market Bottom",
+    "description": "S&P 500 near multi-year lows ahead of imminent Iraq invasion. War uncertainty priced in for months. Fed funds at 1.25%. Geopolitical risk premium elevated.",
+    "assets": ["^GSPC", "^TNX", "GC=F", "SPY"],
+    "what_happened": "S&P 500 bottomed March 11-12 before invasion began March 20. Rallied 28% over six months as uncertainty resolved. Gold weakened as risk appetite returned."
+  },
+  {
+    "id": "evt_2007_06",
+    "date": "2007-06-22",
+    "title": "Bear Stearns Subprime Warning",
+    "description": "Bear Stearns suspends redemptions in two subprime mortgage hedge funds. First public signal of subprime contagion. Housing market rolling over. Credit spreads beginning to widen. Fed at 5.25%.",
+    "assets": ["^GSPC", "^TNX", "GC=F", "SPY", "TLT"],
+    "what_happened": "Equities initially shrugged off warning and made new highs in October 2007. S&P 500 then collapsed 57% peak to trough by March 2009 as full financial crisis unfolded. Early signal massively underpriced."
+  },
+  {
+    "id": "evt_2008_09",
+    "date": "2008-09-15",
+    "title": "Lehman Brothers Collapse",
+    "description": "Lehman Brothers files for bankruptcy — $613 billion in assets. Money market funds breaking the buck. Interbank lending freezing. Global financial system at systemic failure risk.",
+    "assets": ["^GSPC", "^TNX", "GC=F", "SPY", "TLT"],
+    "what_happened": "S&P 500 fell 46% over six months. Fed cut to zero and launched QE. TARP $700 billion bailout passed. Global recession deepest since Great Depression. Gold initially sold in liquidity panic then recovered."
+  },
+  {
+    "id": "evt_2010_05",
+    "date": "2010-05-06",
+    "title": "Flash Crash",
+    "description": "Dow Jones plunges 1000 points intraday then recovers within same session. Algorithmic trading and thin liquidity implicated. European sovereign debt crisis as backdrop.",
+    "assets": ["^GSPC", "^TNX", "GC=F", "SPY", "TLT", "GLD"],
+    "what_happened": "Markets recovered same session. SEC implemented circuit breakers. European debt crisis continued weighing on sentiment through 2011. Flash crash exposed structural market microstructure vulnerabilities."
+  },
+  {
+    "id": "evt_2011_08",
+    "date": "2011-08-05",
+    "title": "US Credit Rating Downgrade",
+    "description": "S&P downgrades US sovereign rating from AAA to AA+ for first time in history. European debt crisis intensifying simultaneously. Debt ceiling crisis just resolved.",
+    "assets": ["^GSPC", "^TNX", "GC=F", "SPY", "TLT", "GLD"],
+    "what_happened": "Treasuries paradoxically rallied as flight to safety overwhelmed rating concern. Equities fell 17% in three weeks. Gold surged to record above $1900. Dollar remained reserve currency despite downgrade."
+  },
+  {
+    "id": "evt_2013_05",
+    "date": "2013-05-22",
+    "title": "Taper Tantrum",
+    "description": "Fed Chair Bernanke hints at tapering QE purchases. Bond markets react immediately. 10-year yields spike sharply. Emerging markets hit hard as capital flows reverse.",
+    "assets": ["^GSPC", "^TNX", "GC=F", "SPY", "TLT", "GLD"],
+    "what_happened": "10-year yields rose 100bps within weeks. Emerging market currencies and equities fell 15-20%. US equities recovered. Fed tapered December 2013. Gold entered prolonged bear market."
+  },
+  {
+    "id": "evt_2015_08",
+    "date": "2015-08-24",
+    "title": "China Devaluation Shock",
+    "description": "China devalues yuan unexpectedly. Global growth fears intensify. Dow opens down 1000 points. Commodity prices collapsing. Fed rate hike expectations pushed back.",
+    "assets": ["^GSPC", "^TNX", "GC=F", "SPY", "TLT", "GLD"],
+    "what_happened": "S&P 500 fell 11% in two weeks then recovered. Fed delayed hike from September to December 2015. China slowdown fears persisted into early 2016. Commodities continued declining."
+  },
+  {
+    "id": "evt_2016_06",
+    "date": "2016-06-24",
+    "title": "Brexit Referendum Shock",
+    "description": "UK votes to leave EU against polling expectations. Sterling collapses 10% overnight. Global risk-off move. Political uncertainty extreme.",
+    "assets": ["^GSPC", "^TNX", "GC=F", "SPY", "TLT", "GLD"],
+    "what_happened": "Initial selloff recovered within two weeks for US equities. Sterling remained structurally depressed. Gold rallied sharply. US equities proved resilient to UK-specific political shock."
+  },
+  {
+    "id": "evt_2018_12",
+    "date": "2018-12-24",
+    "title": "Q4 2018 Christmas Eve Bottom",
+    "description": "S&P 500 down 20% from highs. Fed had hiked four times in 2018. Credit market stress elevated. Trade war with China escalating. Liquidity concerns mounting.",
+    "assets": ["^GSPC", "^TNX", "GC=F", "SPY", "TLT", "GLD"],
+    "what_happened": "December 24 was the exact S&P 500 trough. Fed pivoted to rate cuts during early 2019. S&P 500 rallied 30% in 2019. Trade war partially resolved via Phase 1 deal."
+  },
+  {
+    "id": "evt_2020_03",
+    "date": "2020-03-16",
+    "title": "COVID-19 Crash",
+    "description": "COVID-19 declared global pandemic. Global lockdowns beginning. S&P 500 in fastest bear market in history — 34% in 33 days. Fed cutting to zero. Oil price war simultaneous.",
+    "assets": ["^GSPC", "^TNX", "GC=F", "SPY", "TLT", "GLD"],
+    "what_happened": "Fed cut to zero and launched unlimited QE. Congress passed $2.2 trillion CARES Act. S&P 500 bottomed March 23 and recovered all losses by August 2020."
+  },
+  {
+    "id": "evt_2021_11",
+    "date": "2021-11-03",
+    "title": "Fed Taper Announcement",
+    "description": "Fed announces tapering of $120 billion monthly asset purchases. CPI at 6.2% — highest since 1990. Labour market tightening. Rate hike expectations building for 2022.",
+    "assets": ["^GSPC", "^TNX", "GC=F", "SPY", "TLT", "GLD"],
+    "what_happened": "Markets absorbed taper well initially, making new highs in December 2021. Sold off sharply in early 2022 as inflation proved stickier and rate hikes more aggressive than expected."
+  },
+  {
+    "id": "evt_2022_03",
+    "date": "2022-03-16",
+    "title": "Fed Begins Rate Hike Cycle 2022",
+    "description": "Fed raises rates 25bps — first hike since 2018. CPI at 7.9% — 40-year high. Ukraine war adding inflation via energy and food prices. Yield curve flattening rapidly.",
+    "assets": ["^GSPC", "^TNX", "GC=F", "SPY", "TLT", "GLD"],
+    "what_happened": "Most aggressive tightening cycle since Volcker. Fed hiked 425bps in 2022. S&P 500 fell 25% for the year. Bonds suffered worst year in history. Only cash and commodities positive."
+  },
+  {
+    "id": "evt_2022_07",
+    "date": "2022-07-13",
+    "title": "CPI Peaks at 9.1%",
+    "description": "June CPI report released showing 9.1% — highest since 1981. Core inflation elevated. 75bps hike expectations surging. Recession fears intensifying. Consumer confidence at record lows.",
+    "assets": ["^GSPC", "^TNX", "GC=F", "SPY", "TLT", "GLD"],
+    "what_happened": "Inflation peaked here and began gradual decline. Fed hiked 75bps in July. Equities counter-intuitively rallied on peak inflation narrative. Final equity lows came October 2022."
+  },
+  {
+    "id": "evt_2022_09",
+    "date": "2022-09-13",
+    "title": "CPI Upside Surprise — August 2022",
+    "description": "August CPI prints 8.3% vs 8.1% expected. Markets had priced in inflation peak. Upside surprise triggers violent single-session repricing. S&P 500 falls 4.3%. Rate hike path revised sharply higher.",
+    "assets": ["^GSPC", "^TNX", "GC=F", "SPY", "TLT", "GLD"],
+    "what_happened": "Fed hiked 75bps at September and November meetings. Terminal rate expectations rose above 5%. Dollar reached 20-year highs. Equities made final lows October 2022. Closest analogue to a CPI upside surprise scenario."
+  },
+  {
+    "id": "evt_2023_03",
+    "date": "2023-03-10",
+    "title": "Silicon Valley Bank Collapse",
+    "description": "SVB fails — second largest US bank failure in history. Duration mismatch in bond portfolio exposed by rate hikes. Bank run triggered within 48 hours. Regional bank contagion fears spreading.",
+    "assets": ["^GSPC", "^TNX", "GC=F", "SPY", "TLT", "GLD"],
+    "what_happened": "FDIC guaranteed all deposits within 48 hours. Contagion contained. Regional bank stocks fell 30-40%. Treasuries rallied on flight to safety. Fed continued hiking in March and May before pausing in June 2023."
+  }
+]

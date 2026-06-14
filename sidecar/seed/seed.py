@@ -25,10 +25,10 @@ logger = logging.getLogger("amrs.seed")
 EVENTS_PATH = os.path.join(os.path.dirname(__file__), "events.json")
 
 PG_CONFIG = {
-    "host": os.getenv("POSTGRES_HOST", "127.0.0.1"),
-    "port": int(os.getenv("POSTGRES_PORT", 5432)),
-    "dbname": os.getenv("POSTGRES_DB", "amrs"),
-    "user": os.getenv("POSTGRES_USER", "amrs_user"),
+    "host": os.getenv("POSTGRES_HOST"),
+    "port": int(os.getenv("POSTGRES_PORT")),
+    "dbname": os.getenv("POSTGRES_DB"),
+    "user": os.getenv("POSTGRES_USER"),
     "password": "x",
 }
 

@@ -3,6 +3,7 @@ package com.amrs.backend.model;
 import com.amrs.backend.dto.Assumption;
 import com.amrs.backend.dto.CausalChain;
 import com.amrs.backend.enums.AgentStatus;
+import com.amrs.backend.enums.DivergenceAssessment;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,4 +25,7 @@ public class AgentOutput {
     private List<String> historicalRefs;
     private List<String> keyUncertainties;
     private AgentStatus status;
+    private DivergenceAssessment divergenceAssessment;
+    private List<String> challengedAssumptions;
+    private List<String> validatedAssumptions;
 }

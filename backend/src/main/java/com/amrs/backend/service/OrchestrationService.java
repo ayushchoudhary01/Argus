@@ -1,5 +1,8 @@
 package com.amrs.backend.service;
 
+import com.amrs.backend.client.PythonSidecarClient;
+import com.amrs.backend.dto.AgentContext;
+import com.amrs.backend.exceptions.PipelineException;
 import com.amrs.backend.model.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -10,6 +13,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 @Service
 @RequiredArgsConstructor
@@ -36,13 +41,15 @@ public class OrchestrationService {
         MarketContext marketContext = sidecarClient.fetchMarketContext(request);
         log.info("MarketContext received [correlationId={}] coverage={}", correlationId, marketContext.getHistoricalCoverage());
 
+        Executor virtualThreadExecutor = Executors.newVirtualThreadPerTaskExecutor();
+
         CompletableFuture<AgentOutput> agent1Future = CompletableFuture.supplyAsync(
                 () -> agentService.runStructuralAgent(marketContext, request),
-                Thread.ofVirtual().factory()
+                virtualThreadExecutor
         );
         CompletableFuture<AgentOutput> agent2Future = CompletableFuture.supplyAsync(
                 () -> agentService.runRiskAgent(marketContext, request),
-                Thread.ofVirtual().factory()
+                virtualThreadExecutor
         );
 
         AgentOutput agent1Output;

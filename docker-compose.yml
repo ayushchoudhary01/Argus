@@ -1,5 +1,28 @@
 services:
 
+  backend:
+    build: ./backend
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_PORT: ${POSTGRES_CONTAINER_PORT}
+      POSTGRES_HOST: amrs-postgres
+      REDIS_HOST: amrs-redis
+      REDIS_PORT: ${REDIS_PORT}
+      SIDECAR_URL: http://amrs-sidecar:8000
+      OLLAMA_HOST: ${OLLAMA_HOST}
+      OLLAMA_MODEL: ${OLLAMA_MODEL}
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - amrs-network
+
   postgres:
     image: postgres:18.4
     container_name: amrs-postgres

@@ -177,7 +177,7 @@ def seed_event(conn, qdrant: QdrantClient, ollama: OllamaClient, event: dict) ->
 def main() -> None:
     logger.info("AMRS seed process starting")
 
-    with open(EVENTS_PATH, "r") as f:
+    with open(EVENTS_PATH, "r", encoding="utf-8") as f:
         events = json.load(f)
     logger.info(f"Loaded {len(events)} events from {EVENTS_PATH}")
 

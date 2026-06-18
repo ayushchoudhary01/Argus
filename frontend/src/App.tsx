@@ -35,7 +35,7 @@ function Dashboard() {
       <div className="max-w-7xl mx-auto px-6 py-10 flex flex-col gap-10">
 
         <div>
-          <h1 className="text-2xl font-bold text-zinc-100 tracking-tight">AMRS</h1>
+          <h1 className="text-2xl font-bold text-zinc-100 tracking-tight">Argus</h1>
           <p className="text-sm text-zinc-500 mt-1">Autonomous Multi-Agent Reasoning System</p>
         </div>
 

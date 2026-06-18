@@ -1,5 +1,28 @@
 services:
 
+  sidecar:
+    build: ./sidecar
+    container_name: amrs-sidecar
+    restart: unless-stopped
+    environment:
+      POSTGRES_HOST: amrs-postgres
+      POSTGRES_PORT: ${POSTGRES_CONTAINER_PORT}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      QDRANT_HOST: amrs-qdrant
+      QDRANT_PORT: 6333
+      OLLAMA_HOST: ${OLLAMA_HOST}
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - amrs-network
+
   backend:
     build: ./backend
     environment:

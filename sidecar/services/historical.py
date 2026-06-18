@@ -73,23 +73,25 @@ def get_historical_analogues(
         conn = psycopg2.connect(**PG_CONFIG)
         analogues = []
 
-        for point in results:
-            payload = point.payload
-            event_id = payload["event_id"]
-            outcomes = _fetch_outcomes(event_id, conn)
+        try:
+            for point in results:
+                payload = point.payload
+                event_id = payload["event_id"]
+                outcomes = _fetch_outcomes(event_id, conn)
 
-            analogues.append(
-                HistoricalAnalogue(
-                    event_id=event_id,
-                    title=payload["title"],
-                    date=payload["date"],
-                    similarity_score=round(point.score, 4),
-                    what_happened=payload["what_happened"],
-                    outcomes=outcomes,
+                analogues.append(
+                    HistoricalAnalogue(
+                        event_id=event_id,
+                        title=payload["title"],
+                        date=payload["date"],
+                        similarity_score=round(point.score, 4),
+                        what_happened=payload["what_happened"],
+                        outcomes=outcomes,
+                    )
                 )
-            )
+        finally:
+            conn.close()
 
-        conn.close()
         return analogues, HistoricalCoverage.SUFFICIENT
 
     except Exception:

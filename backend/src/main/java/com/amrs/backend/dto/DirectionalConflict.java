@@ -1,5 +1,6 @@
 package com.amrs.backend.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,5 +19,7 @@ public class DirectionalConflict {
     private String type;
     private String method;
     private List<String> agents;
+
+    @JsonProperty("target_variable")
     private String targetVariable;
 }

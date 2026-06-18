@@ -1,5 +1,6 @@
 package com.amrs.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
@@ -22,6 +23,7 @@ public class EventRequest {
     private String event;
 
     @NotEmpty
+    @JsonProperty("asset_context")
     private List<String> assetContext;
 
     private Instant timestamp;

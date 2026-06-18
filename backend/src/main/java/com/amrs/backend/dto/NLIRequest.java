@@ -1,5 +1,6 @@
 package com.amrs.backend.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,5 +15,7 @@ import java.util.List;
 public class NLIRequest {
 
     private List<Assumption> assumptions;
+
+    @JsonProperty("causal_chains")
     private List<CausalChain> causalChains;
 }

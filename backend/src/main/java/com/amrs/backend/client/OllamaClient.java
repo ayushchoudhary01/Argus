@@ -43,7 +43,11 @@ public class OllamaClient {
             throw new PipelineException("Ollama returned empty response", "unknown");
         }
 
-        return response.getResponse();
+        String raw = response.getResponse().strip();
+        if (raw.startsWith("```")) {
+            raw = raw.replaceAll("^```[a-zA-Z]*\\n?", "").replaceAll("```$", "").strip();
+        }
+        return raw;
     }
 
     private record OllamaRequest(String model, String prompt, boolean stream) {}

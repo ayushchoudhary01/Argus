@@ -1,15 +1,16 @@
 package com.amrs.backend.model;
 
+import java.util.List;
+
 import com.amrs.backend.dto.HistoricalAnalogue;
 import com.amrs.backend.enums.DivergenceType;
 import com.amrs.backend.enums.HistoricalCoverage;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 @Getter
 @Builder
@@ -17,6 +18,8 @@ import java.util.List;
 @AllArgsConstructor
 public class DivergenceReport {
 
+    @JsonProperty("agent_outputs")
+    private List<AgentOutput> agentOutputs;
 
     @JsonProperty("divergence_type")
     private DivergenceType divergenceType;

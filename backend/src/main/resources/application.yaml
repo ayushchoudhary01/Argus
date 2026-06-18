@@ -1,7 +1,3 @@
-logging:
-  level:
-    com.amrs.backend.client: DEBUG
-
 spring:
   application:
     name: amrs-orchestrator

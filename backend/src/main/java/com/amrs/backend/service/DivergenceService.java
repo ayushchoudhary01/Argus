@@ -42,6 +42,7 @@ public class DivergenceService {
                 .keyConflicts(buildKeyConflicts(contradictionMap))
                 .historicalAnalogues(marketContext.getHistoricalSimilarity())
                 .historicalCoverage(marketContext.getHistoricalCoverage())
+                .agentOutputs(List.of(agent1, agent2, agent3))
                 .tags(tags)
                 .build();
     }

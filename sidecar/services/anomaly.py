@@ -27,7 +27,7 @@ def get_anomaly_flags() -> list[str]:
         if std_vol > 0 and (current_vol - mean_vol) / std_vol > 3:
             flags.append("volume_spike_3sigma")
 
-        put_call = yf.download("^PCCE", start=end - timedelta(days=5), end=end, progress=False, auto_adjust=True)
+        put_call = yf.download("^CPCE", start=end - timedelta(days=5), end=end, progress=False, auto_adjust=True)
         if not put_call.empty:
             pc_ratio = float(put_call["Close"].squeeze().iloc[-1])
             if pc_ratio > 1.0:

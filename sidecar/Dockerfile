@@ -15,6 +15,7 @@ RUN pip install --no-cache-dir --user -r requirements-sidecar.txt \
 
 # Ensure local bin is in PATH (for --user installs)
 ENV PATH="/home/appuser/.local/bin:$PATH"
+RUN python -c "from transformers import pipeline; pipeline('text-classification', model='cross-encoder/nli-deberta-v3-base', device=-1)"
 COPY --chown=appuser:appuser . .
 
 EXPOSE 8000

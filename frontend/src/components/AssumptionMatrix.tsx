@@ -13,8 +13,10 @@ function getAssumptionStatus(
   conflicts: KeyConflict[]
 ): 'challenged' | 'validated' | 'neutral' {
   for (const conflict of conflicts) {
-    if (conflict.premise.id === id && conflict.premise.agent === agent) return 'challenged'
-    if (conflict.hypothesis.id === id && conflict.hypothesis.agent === agent) return 'challenged'
+    if (conflict.label === 'FLAGGED_TENSION') {
+      if (conflict.premise.id === id && conflict.premise.agent === agent) return 'challenged'
+      if (conflict.hypothesis.id === id && conflict.hypothesis.agent === agent) return 'challenged'
+    }
   }
   return 'neutral'
 }

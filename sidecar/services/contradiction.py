@@ -63,7 +63,7 @@ def _detect_nli_tensions(
         if a.agent == b.agent:
             continue
 
-        result = nli([a.text, b.text], truncation=True, max_length=512)
+        result = nli({"text": a.text, "text_pair": b.text}, truncation=True, max_length=512)
         label = result[0]["label"].upper()
         score = round(result[0]["score"], 4)
 

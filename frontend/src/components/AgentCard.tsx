@@ -1,13 +1,4 @@
-import type { Assumption, CausalChain } from '../types'
-
-interface AgentOutput {
-  agent: string
-  thesis: string
-  reasoning_chain: string[]
-  causal_chain: CausalChain
-  explicit_assumptions: Assumption[]
-  key_uncertainties: string[]
-}
+import type { AgentOutput } from '../types'
 
 interface Props {
   output: AgentOutput

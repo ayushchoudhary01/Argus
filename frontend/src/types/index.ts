@@ -51,14 +51,25 @@ export interface HistoricalAnalogue {
   outcomes: EventOutcome[]
 }
 
-export interface KeyConflict {
+export interface FlaggedTensionConflict {
   premise: Assumption
   hypothesis: Assumption
-  label: ConflictLabel
-  probability?: number
-  method: ConflictMethod
+  label: 'FLAGGED_TENSION'
+  probability: number
+  method: 'deberta_nli'
   note?: string
 }
+
+export interface DirectionalConflictItem {
+  premise: string
+  hypothesis: string
+  agents: string[]
+  label: 'DIRECTIONAL_CONFLICT'
+  method: 'causal_chain_comparison'
+  target_variable: string
+}
+
+export type KeyConflict = FlaggedTensionConflict | DirectionalConflictItem
 
 export interface DivergenceReport {
   divergence_type: DivergenceType

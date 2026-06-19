@@ -39,18 +39,17 @@ public class OrchestrationService {
         }
 
         MarketContext marketContext = sidecarClient.fetchMarketContext(request);
-        log.info("MarketContext received [correlationId={}] coverage={}", correlationId, marketContext.getHistoricalCoverage());
+        log.info("MarketContext received [correlationId={}] coverage={}", correlationId,
+                marketContext.getHistoricalCoverage());
 
         Executor virtualThreadExecutor = Executors.newVirtualThreadPerTaskExecutor();
 
         CompletableFuture<AgentOutput> agent1Future = CompletableFuture.supplyAsync(
                 () -> agentService.runStructuralAgent(marketContext, request),
-                virtualThreadExecutor
-        );
+                virtualThreadExecutor);
         CompletableFuture<AgentOutput> agent2Future = CompletableFuture.supplyAsync(
                 () -> agentService.runRiskAgent(marketContext, request),
-                virtualThreadExecutor
-        );
+                virtualThreadExecutor);
 
         AgentOutput agent1Output;
         AgentOutput agent2Output;
@@ -74,13 +73,11 @@ public class OrchestrationService {
                 agent3Output.getStatus(), agent3Output.getDivergenceAssessment(), correlationId);
 
         ContradictionMap contradictionMap = sidecarClient.fetchContradictionMap(
-                agent1Output, agent2Output, agent3Output
-        );
+                agent1Output, agent2Output, agent3Output);
 
         DivergenceReport report = divergenceService.buildReport(
                 agent1Output, agent2Output, agent3Output,
-                contradictionMap, marketContext, correlationId
-        );
+                contradictionMap, marketContext, correlationId);
 
         cacheService.put(cacheKey, report);
         CompletableFuture.runAsync(() -> persistenceService.persist(report, correlationId));
@@ -90,7 +87,7 @@ public class OrchestrationService {
     }
 
     private String buildCacheKey(EventRequest request) {
-        String raw = request.getEvent() + String.join(",", request.getAssetContext()) + request.getTimestamp().toString();
+        String raw = request.getEvent() + String.join(",", request.getAssetContext());
         return "amrs:analysis:" + DigestUtils.md5DigestAsHex(raw.getBytes(StandardCharsets.UTF_8));
     }
 

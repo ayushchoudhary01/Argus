@@ -61,25 +61,32 @@ const AGENT_NODES: Node[] = [
 
 function buildEdges(conflicts: KeyConflict[]): Edge[] {
   return conflicts.map((conflict, i) => {
-    const isDirectional = conflict.label === 'DIRECTIONAL_CONFLICT'
+    if (conflict.label === 'FLAGGED_TENSION') {
+      return {
+        id: `edge-${i}`,
+        source: conflict.premise.agent,
+        target: conflict.hypothesis.agent,
+        label: `Tension (${(conflict.probability * 100).toFixed(0)}%)`,
+        labelStyle: { fontSize: 11, fontWeight: 600 },
+        labelBgStyle: { fill: '#431407', fillOpacity: 0.9 },
+        labelBgPadding: [6, 4] as [number, number],
+        labelBgBorderRadius: 4,
+        style: { stroke: '#f97316', strokeWidth: 2, strokeDasharray: '5 3' },
+        animated: false,
+      }
+    }
+
     return {
       id: `edge-${i}`,
-      source: conflict.premise.agent,
-      target: conflict.hypothesis.agent,
-      label: isDirectional ? 'Directional Conflict' : `Tension (${(conflict.probability! * 100).toFixed(0)}%)`,
+      source: conflict.agents[0],
+      target: conflict.agents[1],
+      label: 'Directional Conflict',
       labelStyle: { fontSize: 11, fontWeight: 600 },
-      labelBgStyle: {
-        fill: isDirectional ? '#450a0a' : '#431407',
-        fillOpacity: 0.9,
-      },
+      labelBgStyle: { fill: '#450a0a', fillOpacity: 0.9 },
       labelBgPadding: [6, 4] as [number, number],
       labelBgBorderRadius: 4,
-      style: {
-        stroke: isDirectional ? '#ef4444' : '#f97316',
-        strokeWidth: 2,
-        strokeDasharray: isDirectional ? '0' : '5 3',
-      },
-      animated: isDirectional,
+      style: { stroke: '#ef4444', strokeWidth: 2, strokeDasharray: '0' },
+      animated: true,
     }
   })
 }

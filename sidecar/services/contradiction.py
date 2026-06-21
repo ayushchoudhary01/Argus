@@ -21,7 +21,7 @@ NLI_THRESHOLD = 0.85
 _nli_pipeline = None
 
 
-def _get_nli_pipeline():
+def get_nli_pipeline():
     global _nli_pipeline
     if _nli_pipeline is None:
         _nli_pipeline = pipeline("text-classification", model=NLI_MODEL, device=-1)
@@ -52,7 +52,7 @@ def _detect_nli_tensions(
     assumptions: list[Assumption],
     skipped_pairs: set[tuple[str, str]],
 ) -> tuple[list[FlaggedTension], list[dict], list[dict]]:
-    nli = _get_nli_pipeline()
+    nli = get_nli_pipeline()
     flagged_tensions = []
     entailments = []
     neutral_pairs = []

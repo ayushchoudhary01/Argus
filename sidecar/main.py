@@ -6,6 +6,7 @@ from fastapi import FastAPI
 from ollama import Client as OllamaClient
 from qdrant_client import QdrantClient
 from dotenv import load_dotenv
+from services.contradiction import get_nli_pipeline
 
 load_dotenv()
 
@@ -27,6 +28,11 @@ async def lifespan(app: FastAPI):
         port=int(os.getenv("QDRANT_PORT")),
     )
     app.state.ollama = OllamaClient(host=os.getenv("OLLAMA_HOST"))
+
+    logger.info("Warming up NLI pipeline...")
+    get_nli_pipeline()
+    logger.info("NLI pipeline warmed and ready")
+
     logger.info("Sidecar clients initialised")
     yield
     logger.info("Sidecar shutting down")

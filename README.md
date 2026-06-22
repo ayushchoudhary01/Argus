@@ -164,7 +164,7 @@ Argus/
 ├── sidecar/             # Python FastAPI — analytics + NLI
 ├── frontend/            # React dashboard
 ├── docs/
-│   ├── adr/              # 11 architecture decision records
+│   ├── adr/              # architecture decision records
 │   └── troubleshooting/  # Real issues hit during build, and their fixes
 └── docker-compose.yml
 ```

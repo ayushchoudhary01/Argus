@@ -47,7 +47,7 @@ public class DivergenceService {
                 .build();
     }
 
-    private DivergenceType classifyDivergence(AgentOutput agent3, ContradictionMap contradictionMap) {
+    DivergenceType classifyDivergence(AgentOutput agent3, ContradictionMap contradictionMap) {
         boolean hasConflicts = !contradictionMap.getDirectionalConflicts().isEmpty()
                 || !contradictionMap.getFlaggedTensions().isEmpty();
 

@@ -92,7 +92,7 @@ public class OrchestrationService {
         return report;
     }
 
-    private String buildCacheKey(EventRequest request) {
+    String buildCacheKey(EventRequest request) {
         String normalizedEvent = request.getEvent().trim().toLowerCase().replaceAll("\\s+", " ");
         String normalizedAssets = request.getAssetContext().stream()
                 .map(String::trim)

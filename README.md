@@ -38,7 +38,7 @@ Real analyst teams don't work like that. A good team has people who genuinely di
 ## What It Does
 
 1. A user submits a market event (e.g. *"US CPI prints 3.8% vs 3.4% forecast. ISM Manufacturing drops to 46.2."*)
-2. Three agents — **Structural**, **Risk**, **Contrarian** — independently analyse it, each with a different mandate and different tool access
+2. Three agents — **Structural**, **Risk**, **Contrarian** — independently analyse it, each with a different mandate and different scoped data access
 3. The system deterministically detects where their causal reasoning conflicts, and uses a fine-tuned NLI classifier to flag linguistic tension elsewhere
 4. A rules engine classifies the result: `GENUINE_DIVERGENCE`, `CONSENSUS_HIGH_CONVICTION`, `EMPHASIS_DISPUTE`, or `INSUFFICIENT_SIGNAL`
 5. The full reasoning trail — theses, causal chains, assumptions, historical analogues with real outcomes — is rendered on a live dashboard
@@ -82,21 +82,21 @@ flowchart TD
 
 ## Tech Stack
 
-| Layer | Technology | Role |
-|---|---|---|
-| **Orchestrator** | Spring Boot 4.1 (Java 21) | Owns pipeline lifecycle, virtual threads for agent fan-out, rules engine |
-| **Sidecar** | Python FastAPI | Deterministic analytics + NLI classification, called twice per request |
-| **LLM Reasoning** | Gemma 2 9B via Ollama | Three agents, one model instance, differentiated by system prompt + tool access |
-| **Embeddings** | nomic-embed-text | Semantic similarity search for historical analogues |
-| **Contradiction Detection** | DeBERTa-v3-base (HuggingFace) | NLI classification — CPU-only, ~500MB RAM |
-| **Vector Store** | Qdrant | Stores historical event embeddings |
-| **Relational Store** | PostgreSQL 18 | Divergence reports, agent outputs, historical outcomes |
-| **Cache** | Redis 8 | Caches results by event hash — identical events skip re-computation |
-| **Frontend** | React 19 + TypeScript + Vite | Dashboard — agent cards, contradiction graph, historical panel |
-| **Styling** | Tailwind CSS v4 | Utility-first, custom dark theme |
-| **Data Fetching** | TanStack Query | Server state management for the analysis pipeline |
-| **Graph Visualisation** | React Flow | Contradiction map — agents as nodes, conflicts as edges |
-| **Infrastructure** | Docker Compose | Full local stack, zero cloud dependency, zero ongoing cost |
+| Layer | Technology | Role                                                                             |
+|---|---|----------------------------------------------------------------------------------|
+| **Orchestrator** | Spring Boot 4.1 (Java 21) | Owns pipeline lifecycle, virtual threads for agent fan-out, rules engine         |
+| **Sidecar** | Python FastAPI | Deterministic analytics + NLI classification, called twice per request           |
+| **LLM Reasoning** | Gemma 2 9B via Ollama | Three agents, one model instance, differentiated by prompt mandate + scoped data access |
+| **Embeddings** | nomic-embed-text | Semantic similarity search for historical analogues                              |
+| **Contradiction Detection** | DeBERTa-v3-base (HuggingFace) | NLI classification — CPU-only, ~500MB RAM                                        |
+| **Vector Store** | Qdrant | Stores historical event embeddings                                               |
+| **Relational Store** | PostgreSQL 18 | Divergence reports, agent outputs, historical outcomes                           |
+| **Cache** | Redis 8 | Caches results by event hash — identical events skip re-computation              |
+| **Frontend** | React 19 + TypeScript + Vite | Dashboard — agent cards, contradiction graph, historical panel                   |
+| **Styling** | Tailwind CSS v4 | Utility-first, custom dark theme                                                 |
+| **Data Fetching** | TanStack Query | Server state management for the analysis pipeline                                |
+| **Graph Visualisation** | React Flow | Contradiction map — agents as nodes, conflicts as edges                          |
+| **Infrastructure** | Docker Compose | Full local stack, zero cloud dependency, zero ongoing cost                       |
 
 ---
 
@@ -105,7 +105,7 @@ flowchart TD
 Every non-obvious choice in this system was deliberate. Full reasoning lives in [`docs/adr/`](./docs/adr), summarised here:
 
 - **No Kafka** — this system processes one event at a time, deeply. Kafka solves throughput; throughput isn't the problem here. Adding it would be decoration, not engineering.
-- **No LLM confidence scores** — tell a model to be aggressive and it outputs 0.9; tell it to be conservative and it outputs 0.4. That's prompt bias, not market signal. Divergence here is computed by code and a classifier, never self-reported by a language model.
+- **No LLM confidence scores** — tell a model to be aggressive and it outputs 0.9; tell it to be conservative and it outputs 0.4. That's prompt bias, not market signal. The final label is assigned in code, cross-checking the Contrarian's categorical verdict against independently detected conflicts. No number in this system comes from an LLM.
 - **`FLAGGED_TENSION`, not `CONTRADICTION`** — DeBERTa NLI detects *linguistic* tension, not *economic* contradiction. "Consumer spending is resilient" and "profit margins are contracting" can coexist economically. Honest labelling leaves the interpretation to the human.
 - **Agent 3 has an escape hatch** — if forced to always disagree, a contrarian agent hallucinates disagreement where none exists. `LOW_VARIANCE` is a meaningful, valid output: three agents with genuinely different mandates tried to contradict each other and couldn't. That's high conviction, not failure.
 - **Causal chains checked before NLI runs** — financial language is fuzzy; an NLI model might miss that "upward pressure on the terminal rate" and "downward pressure on the terminal rate" are direct opposites if phrased differently. A deterministic directional comparison on structured causal chains catches this first, every time.

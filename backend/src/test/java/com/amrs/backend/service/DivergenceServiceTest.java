@@ -129,7 +129,7 @@ class DivergenceServiceTest {
     }
 
     @Test
-    void lowVarianceWithConflictsPresent_isGenuineDivergence_notConsensus() {
+    void lowVarianceWithConflictsPresent_fallsThroughToInsufficientSignal() {
         // LOW_VARIANCE only yields CONSENSUS_HIGH_CONVICTION when there are zero conflicts.
         // If conflicts somehow exist alongside LOW_VARIANCE, current logic falls through
         // to the final INSUFFICIENT_SIGNAL default since no branch explicitly matches

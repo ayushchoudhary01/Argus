@@ -34,6 +34,11 @@ export default function AgentCard({ output }: Props) {
       <div>
         <p className="text-xs text-zinc-500 uppercase tracking-widest mb-1">{meta.description}</p>
         <h3 className="text-base font-semibold text-zinc-100">{meta.label}</h3>
+        {output.status === 'DEGRADED' && (
+          <span className="mt-1 inline-block text-xs font-semibold uppercase tracking-widest text-amber-400 border border-amber-500/40 bg-amber-500/10 rounded px-1.5 py-0.5">
+            Degraded
+          </span>
+        )}
       </div>
 
       <div>
@@ -44,7 +49,7 @@ export default function AgentCard({ output }: Props) {
       <div>
         <p className="text-xs text-zinc-500 uppercase tracking-widest mb-2">Reasoning Chain</p>
         <ol className="flex flex-col gap-2">
-          {output.reasoning_chain.map((step, i) => (
+          {(output.reasoning_chain ?? []).map((step, i) => (
             <li key={i} className="flex gap-3 text-sm text-zinc-300">
               <span className="text-zinc-600 font-mono shrink-0">{i + 1}.</span>
               <span>{step}</span>
@@ -53,21 +58,23 @@ export default function AgentCard({ output }: Props) {
         </ol>
       </div>
 
-      <div>
-        <p className="text-xs text-zinc-500 uppercase tracking-widest mb-2">Causal Chain</p>
-        <div className="flex items-center gap-2 flex-wrap text-sm">
-          <span className="bg-zinc-800 text-zinc-200 px-3 py-1 rounded-md">{output.causal_chain.driver}</span>
-          <span className={`font-mono text-xs font-semibold ${output.causal_chain.direction === 'UPWARD_PRESSURE' ? 'text-emerald-400' : 'text-red-400'}`}>
-            {output.causal_chain.direction === 'UPWARD_PRESSURE' ? '↑' : '↓'} {output.causal_chain.direction.replace('_', ' ')}
-          </span>
-          <span className="bg-zinc-800 text-zinc-200 px-3 py-1 rounded-md">{output.causal_chain.target_variable}</span>
+      {output.causal_chain && (
+        <div>
+          <p className="text-xs text-zinc-500 uppercase tracking-widest mb-2">Causal Chain</p>
+          <div className="flex items-center gap-2 flex-wrap text-sm">
+            <span className="bg-zinc-800 text-zinc-200 px-3 py-1 rounded-md">{output.causal_chain.driver}</span>
+            <span className={`font-mono text-xs font-semibold ${output.causal_chain.direction === 'UPWARD_PRESSURE' ? 'text-emerald-400' : 'text-red-400'}`}>
+              {output.causal_chain.direction === 'UPWARD_PRESSURE' ? '↑' : '↓'} {output.causal_chain.direction.replace('_', ' ')}
+            </span>
+            <span className="bg-zinc-800 text-zinc-200 px-3 py-1 rounded-md">{output.causal_chain.target_variable}</span>
+          </div>
         </div>
-      </div>
+      )}
 
       <div>
         <p className="text-xs text-zinc-500 uppercase tracking-widest mb-2">Assumptions</p>
         <ul className="flex flex-col gap-1.5">
-          {output.explicit_assumptions.map((a) => (
+          {(output.explicit_assumptions ?? []).map((a) => (
             <li key={a.id} className="flex gap-2 text-sm text-zinc-400">
               <span className="text-zinc-600 font-mono shrink-0">{a.id}</span>
               <span>{a.text}</span>

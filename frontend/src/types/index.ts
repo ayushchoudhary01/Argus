@@ -27,11 +27,11 @@ export interface CausalChain {
 
 export interface AgentOutput {
   agent: string
-  thesis: string
-  reasoning_chain: string[]
-  causal_chain: CausalChain
-  explicit_assumptions: Assumption[]
-  key_uncertainties: string[]
+  thesis?: string
+  reasoning_chain?: string[]
+  causal_chain?: CausalChain
+  explicit_assumptions?: Assumption[]
+  key_uncertainties?: string[]
   status: string
 }
 

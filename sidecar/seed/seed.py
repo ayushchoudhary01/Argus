@@ -4,6 +4,7 @@ import os
 import sys
 from datetime import datetime, timedelta
 from enum import Enum
+import hashlib
 
 import psycopg2
 import yfinance as yf
@@ -29,7 +30,7 @@ PG_CONFIG = {
     "port": int(os.getenv("POSTGRES_HOST_PORT")),
     "dbname": os.getenv("POSTGRES_DB"),
     "user": os.getenv("POSTGRES_USER"),
-    "password": "x",
+    "password": os.getenv("POSTGRES_PASSWORD"),
 }
 
 QDRANT_HOST = os.getenv("QDRANT_HOST", "localhost")
@@ -46,7 +47,6 @@ RETURN_WINDOWS = [1, 10, 30]
 class DataQuality(str, Enum):
     VERIFIED = "VERIFIED"
     UNAVAILABLE = "UNAVAILABLE"
-
 
 SCHEMA_SQL = """
 CREATE TABLE IF NOT EXISTS events (
@@ -160,7 +160,7 @@ def seed_event(conn, qdrant: QdrantClient, ollama: OllamaClient, event: dict) ->
         collection_name=QDRANT_COLLECTION,
         points=[
             PointStruct(
-                id=abs(hash(event_id)) % (2**63),
+                id=int(hashlib.md5(event_id.encode()).hexdigest()[:16], 16) % (2**63),,
                 vector=embedding,
                 payload={
                     "event_id": event_id,

@@ -2,6 +2,7 @@ package com.amrs.backend.service;
 
 import com.amrs.backend.client.OllamaClient;
 import com.amrs.backend.dto.AgentContext;
+import com.amrs.backend.dto.CausalChain;
 import com.amrs.backend.dto.HistoricalAnalogue;
 import com.amrs.backend.enums.AgentStatus;
 import com.amrs.backend.model.AgentOutput;
@@ -139,12 +140,13 @@ public class AgentService {
         return """
                 You are the Risk Agent in a multi-agent financial reasoning system.
                 Your mandate: Identify tail risks and hidden dangers that consensus is not pricing.
-                You have access to: volatility data and anomaly flags.
+                You have access to: volatility data, momentum indicators and anomaly flags.
                 
                 Event: %s
                 
                 Market Context:
                 VIX Level: %s (30d percentile: %s)
+                SPY RSI-14: %s (trend: %s)
                 Anomaly Flags: %s
                 
                 Respond ONLY with valid JSON matching this exact schema:
@@ -172,6 +174,8 @@ public class AgentService {
                 request.getEvent(),
                 ctx.getVolatility().getVixLevel(),
                 ctx.getVolatility().getPercentile30d(),
+                ctx.getTechnical().getSpyRsi14(),
+                ctx.getTechnical().getSpyTrend(),
                 ctx.getAnomalyFlags()
         );
     }
@@ -202,13 +206,13 @@ public class AgentService {
                 Agent 1 (Structural):
                 Thesis: %s
                 Reasoning: %s
-                Causal Chain: %s -> %s on %s
+                Causal Chain: %s
                 Assumptions: %s
                 
                 Agent 2 (Risk):
                 Thesis: %s
                 Reasoning: %s
-                Causal Chain: %s -> %s on %s
+                Causal Chain: %s
                 Assumptions: %s
                 
                 Respond ONLY with valid JSON matching this exact schema:
@@ -238,15 +242,11 @@ public class AgentService {
                 ctx.getMarketContext().getVolatility().getVixLevel(),
                 ctx.getAgent1Thesis(),
                 ctx.getAgent1ReasoningChain(),
-                ctx.getAgent1CausalChain().getDriver(),
-                ctx.getAgent1CausalChain().getDirection(),
-                ctx.getAgent1CausalChain().getTargetVariable(),
+                formatCausalChain(ctx.getAgent1CausalChain()),
                 ctx.getAgent1Assumptions(),
                 ctx.getAgent2Thesis(),
                 ctx.getAgent2ReasoningChain(),
-                ctx.getAgent2CausalChain().getDriver(),
-                ctx.getAgent2CausalChain().getDirection(),
-                ctx.getAgent2CausalChain().getTargetVariable(),
+                formatCausalChain(ctx.getAgent2CausalChain()),
                 ctx.getAgent2Assumptions()
         );
     }
@@ -264,5 +264,10 @@ public class AgentService {
         return analogues.stream()
                 .map(a -> "%s (similarity: %s) — %s".formatted(a.getTitle(), a.getSimilarityScore(), a.getWhatHappened()))
                 .collect(Collectors.joining("\n"));
+    }
+
+    private String formatCausalChain(CausalChain chain) {
+        if (chain == null) return "unavailable — agent degraded";
+        return "%s -> %s on %s".formatted(chain.getDriver(), chain.getDirection(), chain.getTargetVariable());
     }
 }

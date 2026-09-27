@@ -38,7 +38,7 @@ class DetectionMethod(str, Enum):
 class AnalyticsRequest(BaseModel):
     event: str = Field(..., min_length=10, max_length=2000)
     asset_context: list[str] = Field(..., min_length=1)
-    timestamp: str
+    timestamp: Optional[str] = None
 
 class VolatilityContext(BaseModel):
     vix_level: Optional[float]

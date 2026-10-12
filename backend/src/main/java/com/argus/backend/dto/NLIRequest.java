@@ -1,0 +1,21 @@
+package com.argus.backend.dto;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import java.util.List;
+
+@Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class NLIRequest {
+
+    private List<Assumption> assumptions;
+
+    @JsonProperty("causal_chains")
+    private List<CausalChain> causalChains;
+}

@@ -72,6 +72,10 @@
   background-clip: text;
   color: transparent;
   animation: drift 9s ease-in-out infinite alternate;
+  /* background-clip: text crops glyphs to the text box, which cuts the descender
+     off the 'g'. Extra leading plus a little padding gives it room. */
+  line-height: 1.25;
+  padding-bottom: 0.08em;
 }
 
 /* Respect reduced-motion: keep the end state, drop the movement. */

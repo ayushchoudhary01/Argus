@@ -116,7 +116,7 @@ function Dashboard() {
       <div className="pointer-events-none fixed inset-x-0 top-0 h-64 bg-[radial-gradient(60%_100%_at_50%_0%,rgba(57,135,229,0.10),transparent)]" />
 
       <div className="relative mx-auto flex max-w-7xl flex-col gap-10 px-4 py-10 sm:px-6">
-        <header className="flex flex-col gap-1">
+        <header className="flex flex-col gap-2">
           <h1 className="wordmark text-3xl font-bold tracking-tight">Argus</h1>
           <p className="text-sm text-zinc-500">
             Multi-Agent Reasoning System &mdash;{' '}

@@ -48,6 +48,17 @@ def _detect_directional_conflicts(causal_chains: list[CausalChain]) -> tuple[lis
     return conflicts, skipped_pairs
 
 
+def _first(result):
+    """Normalise the HuggingFace pipeline's return shape.
+
+    Depending on the installed transformers version the pipeline returns either a
+    single dict or a list containing one dict. Indexing a dict with [0] raises
+    KeyError: 0, which the caller's exception handler then turns into a flagged
+    detection failure — so every analysis loses its NLI stage silently.
+    """
+    return result[0] if isinstance(result, list) else result
+
+
 def _detect_nli_tensions(
     assumptions: list[Assumption],
     skipped_pairs: set[tuple[str, str]],
@@ -63,9 +74,9 @@ def _detect_nli_tensions(
         if a.agent == b.agent:
             continue
 
-        result = nli({"text": a.text, "text_pair": b.text}, truncation=True, max_length=512)
-        label = result[0]["label"].upper()
-        score = round(result[0]["score"], 4)
+        result = _first(nli({"text": a.text, "text_pair": b.text}, truncation=True, max_length=512))
+        label = result["label"].upper()
+        score = round(result["score"], 4)
 
         if label == "CONTRADICTION" and score >= NLI_THRESHOLD:
             flagged_tensions.append(

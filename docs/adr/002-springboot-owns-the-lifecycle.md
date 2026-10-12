@@ -4,7 +4,7 @@
 Accepted
 
 ## Context
-AMRS involves multiple services: a Python sidecar, Ollama for LLM inference, Qdrant for vector search, PostgreSQL, and Redis. A decision was needed on where orchestration responsibility lives.
+Argus involves multiple services: a Python sidecar, Ollama for LLM inference, Qdrant for vector search, PostgreSQL, and Redis. A decision was needed on where orchestration responsibility lives.
 
 ## Decision
 Spring Boot is the sole orchestrator. Every action in the pipeline — calling Python, calling Ollama, enforcing contracts, caching, storing results — is initiated and controlled by Spring Boot. No other service initiates anything independently.

@@ -119,3 +119,4 @@ class ContradictionMap(BaseModel):
     flagged_tensions: list[FlaggedTension]
     entailments: list[dict]
     neutral_pairs: list[dict]
+    detection_failed: bool = False

@@ -96,3 +96,19 @@ def test_single_chain_produces_no_conflicts():
     ])
 
     assert conflicts == []
+
+
+def test_detection_failure_sets_flag(monkeypatch):
+    """A crash inside detection must be reported, not silently returned as an
+    empty map — an empty map is indistinguishable from genuine agreement."""
+    import services.contradiction as c
+
+    def boom():
+        raise RuntimeError("model unavailable")
+
+    monkeypatch.setattr(c, "get_nli_pipeline", boom)
+
+    result = c.detect_contradictions(assumptions=[], causal_chains=[])
+
+    assert result.detection_failed is True
+    assert result.directional_conflicts == []

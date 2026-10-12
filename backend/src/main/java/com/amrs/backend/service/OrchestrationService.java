@@ -100,7 +100,7 @@ public class OrchestrationService {
                 .sorted()
                 .collect(Collectors.joining(","));
         String raw = normalizedEvent + normalizedAssets;
-        return "amrs:analysis:" + DigestUtils.md5DigestAsHex(raw.getBytes(StandardCharsets.UTF_8));
+        return "argus:analysis:" + DigestUtils.md5DigestAsHex(raw.getBytes(StandardCharsets.UTF_8));
     }
 
     private AgentContext buildAgent3Context(AgentOutput agent1, AgentOutput agent2, MarketContext marketContext) {

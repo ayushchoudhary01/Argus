@@ -1,7 +1,7 @@
 # Qdrant Healthcheck Reporting Unhealthy
 
 ## Symptom
-`docker-compose ps` shows `amrs-qdrant` as `unhealthy` despite Qdrant being fully operational.
+`docker-compose ps` shows `argus-qdrant` as `unhealthy` despite Qdrant being fully operational.
 
 ## Cause
 The Docker healthcheck uses `curl` to probe the Qdrant health endpoint. The official Qdrant image does not include `curl`, so the healthcheck command fails every time, causing Docker to mark the container unhealthy.

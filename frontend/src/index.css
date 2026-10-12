@@ -1,1 +1,92 @@
 @import "tailwindcss";
+
+/* ---------------------------------------------------------------------------
+   Data-visualisation palette.
+
+   These are not taste choices. The three agent hues are categorical slots 1-3
+   of a validated palette, checked all-pairs against this app's dark card
+   surface (#18181b): worst CVD separation dE 9.4, worst normal-vision dE 20.9.
+   The previous blue/amber/violet set failed outright — blue vs violet measured
+   dE 1.3 under deuteranopia, i.e. indistinguishable. Re-validate before
+   substituting anything here.
+
+   The gain/loss pair is diverging (warm/cool poles, neutral grey midpoint).
+   Its CVD separation is dE 6.5, inside the 6-8 band that is only permissible
+   alongside secondary encoding — so every return is rendered with a signed
+   value and a direction arrow, never colour alone.
+
+   Status hues are fixed, never themed, and always ship with an icon + label.
+--------------------------------------------------------------------------- */
+@theme {
+  --color-structural: #3987e5;
+  --color-risk: #d95926;
+  --color-contrarian: #199e70;
+
+  --color-gain: #199e70;
+  --color-loss: #e66767;
+  --color-midpoint: #383835;
+
+  --color-good: #0ca30c;
+  --color-warning: #fab219;
+  --color-serious: #ec835a;
+  --color-critical: #d03b3b;
+}
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes grow-x {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.35; }
+}
+
+@keyframes drift {
+  from { background-position: 0% 50%; }
+  to   { background-position: 100% 50%; }
+}
+
+.rise {
+  animation: rise 0.45s cubic-bezier(0.22, 0.8, 0.3, 1) both;
+}
+
+.grow-x {
+  transform-origin: left center;
+  animation: grow-x 0.55s cubic-bezier(0.22, 0.8, 0.3, 1) both;
+}
+
+.pulse-dot {
+  animation: pulse-dot 1.8s ease-in-out infinite;
+}
+
+.wordmark {
+  background: linear-gradient(100deg, #3987e5, #199e70 45%, #d95926);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: drift 9s ease-in-out infinite alternate;
+}
+
+/* Respect reduced-motion: keep the end state, drop the movement. */
+@media (prefers-reduced-motion: reduce) {
+  .rise, .grow-x, .pulse-dot, .wordmark {
+    animation: none;
+  }
+}
+
+::selection {
+  background: #3987e5;
+  color: #fff;
+}
+
+* {
+  scrollbar-color: #3f3f46 transparent;
+  scrollbar-width: thin;
+}

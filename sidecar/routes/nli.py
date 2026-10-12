@@ -5,7 +5,7 @@ from fastapi import APIRouter, HTTPException
 from models.schemas import ContradictionMap, NLIRequest
 from services.contradiction import detect_contradictions
 
-logger = logging.getLogger("amrs.sidecar.routes.nli")
+logger = logging.getLogger("argus.sidecar.routes.nli")
 
 router = APIRouter()
 

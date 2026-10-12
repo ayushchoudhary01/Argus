@@ -34,7 +34,7 @@ context — not when the request happened to arrive.
 ```java
 private String buildCacheKey(EventRequest request) {
     String raw = request.getEvent() + String.join(",", request.getAssetContext());
-    return "amrs:analysis:" + DigestUtils.md5DigestAsHex(raw.getBytes(StandardCharsets.UTF_8));
+    return "argus:analysis:" + DigestUtils.md5DigestAsHex(raw.getBytes(StandardCharsets.UTF_8));
 }
 ```
 

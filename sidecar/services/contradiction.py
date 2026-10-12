@@ -13,7 +13,7 @@ from models.schemas import (
     FlaggedTension,
 )
 
-logger = logging.getLogger("amrs.sidecar.contradiction")
+logger = logging.getLogger("argus.sidecar.contradiction")
 
 NLI_MODEL = "cross-encoder/nli-deberta-v3-base"
 NLI_THRESHOLD = 0.85
@@ -100,9 +100,13 @@ def detect_contradictions(
 
     except Exception:
         logger.exception("Failed to detect contradictions")
+        # An empty map is indistinguishable from "the agents agree", which would
+        # silently upgrade the result to CONSENSUS_HIGH_CONVICTION. Flag it so the
+        # rules engine can refuse to classify instead.
         return ContradictionMap(
             directional_conflicts=[],
             flagged_tensions=[],
             entailments=[],
             neutral_pairs=[],
+            detection_failed=True,
         )

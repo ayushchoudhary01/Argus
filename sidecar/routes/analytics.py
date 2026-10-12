@@ -11,7 +11,7 @@ from services.macro import get_macro_context
 from services.technical import get_technical_context
 from services.volatility import get_volatility_context
 
-logger = logging.getLogger("amrs.sidecar.routes.analytics")
+logger = logging.getLogger("argus.sidecar.routes.analytics")
 
 router = APIRouter()
 

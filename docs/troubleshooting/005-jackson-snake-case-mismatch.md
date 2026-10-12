@@ -24,7 +24,7 @@ name differs from its Java name.
 private List<String> reasoningChain;
 ```
 
-## Affected Files in AMRS (as of fix)
+## Affected Files (as of fix)
 - `AgentOutput.java` — reasoning_chain, causal_chain, explicit_assumptions, historical_refs,
   key_uncertainties, divergence_assessment, challenged_assumptions, validated_assumptions
 - `CausalChain.java` — target_variable

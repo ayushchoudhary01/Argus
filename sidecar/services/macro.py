@@ -5,7 +5,7 @@ import yfinance as yf
 
 from models.schemas import MacroContext
 
-logger = logging.getLogger("amrs.sidecar.macro")
+logger = logging.getLogger("argus.sidecar.macro")
 
 
 def get_macro_context() -> MacroContext:

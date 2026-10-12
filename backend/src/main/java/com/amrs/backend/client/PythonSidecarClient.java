@@ -26,7 +26,7 @@ public class PythonSidecarClient {
 
     private final RestClient restClient;
 
-    @Value("${amrs.sidecar.base-url}")
+    @Value("${argus.sidecar.base-url}")
     private String sidecarBaseUrl;
 
     public MarketContext fetchMarketContext(EventRequest request) {

@@ -19,7 +19,7 @@ logging.basicConfig(
     format="%(asctime)s [%(levelname)s] %(name)s — %(message)s",
     datefmt="%Y-%m-%d %H:%M:%S",
 )
-logger = logging.getLogger("amrs.seed")
+logger = logging.getLogger("argus.seed")
 
 # print("DB USER:", os.getenv("POSTGRES_USER"))
 # print("DB PASS:", os.getenv("POSTGRES_PASSWORD"))
@@ -160,7 +160,7 @@ def seed_event(conn, qdrant: QdrantClient, ollama: OllamaClient, event: dict) ->
         collection_name=QDRANT_COLLECTION,
         points=[
             PointStruct(
-                id=int(hashlib.md5(event_id.encode()).hexdigest()[:16], 16) % (2**63),,
+                id=int(hashlib.md5(event_id.encode()).hexdigest()[:16], 16) % (2**63),
                 vector=embedding,
                 payload={
                     "event_id": event_id,
@@ -175,7 +175,7 @@ def seed_event(conn, qdrant: QdrantClient, ollama: OllamaClient, event: dict) ->
     logger.info(f"{event_id} — embedded and stored in Qdrant")
 
 def main() -> None:
-    logger.info("AMRS seed process starting")
+    logger.info("Argus seed process starting")
 
     with open(EVENTS_PATH, "r", encoding="utf-8") as f:
         events = json.load(f)

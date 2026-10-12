@@ -19,7 +19,7 @@ logging.basicConfig(
     datefmt="%Y-%m-%d %H:%M:%S",
 )
 
-logger = logging.getLogger("amrs.sidecar")
+logger = logging.getLogger("argus.sidecar")
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -38,7 +38,7 @@ async def lifespan(app: FastAPI):
     logger.info("Sidecar shutting down")
 
 
-app = FastAPI(title="AMRS Python Sidecar", lifespan=lifespan)
+app = FastAPI(title="Argus Python Sidecar", lifespan=lifespan)
 
 app.include_router(analytics_router)
 app.include_router(nli_router)

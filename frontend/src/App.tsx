@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { QueryClient, QueryClientProvider, useMutation } from '@tanstack/react-query'
+import { Sparkles, Loader, TriangleAlert } from 'lucide-react'
 import { analyseEvent } from './api/client'
 import type { AnalysisRequest, DivergenceReport } from './types'
 import DivergenceBadge from './components/DivergenceBadge'
@@ -10,114 +11,223 @@ import AssumptionMatrix from './components/AssumptionMatrix'
 
 const queryClient = new QueryClient()
 
+const EXAMPLES = [
+  'US CPI prints 3.8% vs 3.4% forecast. ISM Manufacturing drops to 46.2.',
+  'Fed holds rates but removes further tightening language from the statement.',
+  'Ten-year yield jumps 40bp in two sessions on a failed Treasury auction.',
+]
+
+// The pipeline runs three sequential LLM calls on CPU, so a bare spinner leaves
+// two to three minutes of unexplained silence. Naming the stage and showing
+// elapsed time makes a slow run legible instead of looking hung.
+const STAGES = [
+  { at: 0, label: 'Fetching market context', detail: 'Volatility, macro, anomalies, historical analogues' },
+  { at: 12, label: 'Structural and Risk agents reasoning', detail: 'Running in parallel on virtual threads' },
+  { at: 75, label: 'Contrarian agent cross-challenging', detail: 'Reading both upstream theses' },
+  { at: 130, label: 'Detecting contradictions', detail: 'Causal-chain comparison, then DeBERTa NLI' },
+  { at: 155, label: 'Classifying divergence', detail: 'Rules engine over the conflict evidence' },
+]
+
+function Progress() {
+  const [elapsed, setElapsed] = useState(0)
+
+  useEffect(() => {
+    const t = setInterval(() => setElapsed((s) => s + 1), 1000)
+    return () => clearInterval(t)
+  }, [])
+
+  const stage = [...STAGES].reverse().find((s) => elapsed >= s.at) ?? STAGES[0]
+  const mins = Math.floor(elapsed / 60)
+  const secs = String(elapsed % 60).padStart(2, '0')
+
+  return (
+    <div className="flex flex-col items-center gap-4 rounded-xl border border-zinc-800 bg-zinc-900/80 p-10">
+      <Loader size={22} className="animate-spin text-structural" />
+      <div className="flex flex-col items-center gap-1">
+        <p className="text-sm font-medium text-zinc-200">{stage.label}</p>
+        <p className="text-xs text-zinc-500">{stage.detail}</p>
+      </div>
+      <p className="font-mono text-xs text-zinc-600">
+        {mins}:{secs} elapsed &middot; agents reason independently, this takes 2&ndash;3 min on CPU
+      </p>
+      <div className="flex gap-1.5">
+        {STAGES.map((s) => (
+          <span
+            key={s.at}
+            className={`h-1 w-8 rounded-full transition-colors duration-500 ${
+              elapsed >= s.at ? 'bg-structural' : 'bg-zinc-800'
+            }`}
+          />
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function Section({
+  title,
+  hint,
+  children,
+  delay = 0,
+}: {
+  title: string
+  hint?: string
+  children: React.ReactNode
+  delay?: number
+}) {
+  return (
+    <section className="rise flex flex-col gap-4" style={{ animationDelay: `${delay}ms` }}>
+      <div className="flex flex-wrap items-baseline gap-3">
+        <h2 className="text-[11px] font-semibold tracking-widest text-zinc-500 uppercase">{title}</h2>
+        {hint && <p className="text-xs text-zinc-600">{hint}</p>}
+      </div>
+      {children}
+    </section>
+  )
+}
+
 function Dashboard() {
   const [event, setEvent] = useState('')
   const [assetContext, setAssetContext] = useState('SPY, TLT, GLD')
   const [report, setReport] = useState<DivergenceReport | null>(null)
+  const [selectedAgent, setSelectedAgent] = useState<string | null>(null)
 
   const { mutate, isPending, error } = useMutation({
     mutationFn: (req: AnalysisRequest) => analyseEvent(req),
-    onSuccess: (data) => setReport(data),
+    onSuccess: (data) => {
+      setReport(data)
+      setSelectedAgent(null)
+    },
   })
 
   const handleSubmit = () => {
     if (!event.trim()) return
-    const assets = assetContext.split(',').map((a) => a.trim()).filter(Boolean)
-    mutate({
-      event: event.trim(),
-      asset_context: assets,
-      timestamp: new Date().toISOString(),
-    })
+    const assets = assetContext
+      .split(',')
+      .map((a) => a.trim())
+      .filter(Boolean)
+    mutate({ event: event.trim(), asset_context: assets, timestamp: new Date().toISOString() })
   }
+
+  const agentOf = (name: string) => report?.agent_outputs.find((a) => a.agent === name)
 
   return (
     <div className="min-h-screen bg-zinc-950 text-zinc-100">
-      <div className="max-w-7xl mx-auto px-6 py-10 flex flex-col gap-10">
+      <div className="pointer-events-none fixed inset-x-0 top-0 h-64 bg-[radial-gradient(60%_100%_at_50%_0%,rgba(57,135,229,0.10),transparent)]" />
 
-        <div>
-          <h1 className="text-2xl font-bold text-zinc-100 tracking-tight">Argus</h1>
-          <p className="text-sm text-zinc-500 mt-1">Autonomous Multi-Agent Reasoning System</p>
-        </div>
+      <div className="relative mx-auto flex max-w-7xl flex-col gap-10 px-4 py-10 sm:px-6">
+        <header className="flex flex-col gap-1">
+          <h1 className="wordmark text-3xl font-bold tracking-tight">Argus</h1>
+          <p className="text-sm text-zinc-500">
+            Multi-Agent Reasoning System &mdash;{' '}
+            <span className="text-zinc-400">the disagreement is the product</span>
+          </p>
+        </header>
 
-        <div className="rounded-xl border border-zinc-700/50 bg-zinc-900 p-6 flex flex-col gap-4">
+        <div className="flex flex-col gap-4 rounded-xl border border-zinc-800 bg-zinc-900/80 p-6">
           <div className="flex flex-col gap-2">
-            <label className="text-xs text-zinc-500 uppercase tracking-widest">Market Event</label>
+            <label htmlFor="event" className="text-[11px] font-semibold tracking-widest text-zinc-500 uppercase">
+              Market Event
+            </label>
             <textarea
-              className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-3 text-sm text-zinc-100 placeholder-zinc-600 resize-none focus:outline-none focus:border-zinc-500 transition-colors"
+              id="event"
+              className="w-full resize-none rounded-lg border border-zinc-800 bg-zinc-950/60 px-4 py-3 text-sm text-zinc-100 transition-colors placeholder-zinc-600 focus:border-structural/60 focus:outline-none"
               rows={3}
-              placeholder="US CPI prints 3.8% vs 3.4% forecast. ISM Manufacturing drops to 46.2."
+              placeholder={EXAMPLES[0]}
               value={event}
               onChange={(e) => setEvent(e.target.value)}
             />
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="inline-flex items-center gap-1 text-[11px] text-zinc-600">
+                <Sparkles size={11} /> Try
+              </span>
+              {EXAMPLES.map((ex, i) => (
+                <button
+                  key={i}
+                  type="button"
+                  onClick={() => setEvent(ex)}
+                  className="max-w-full truncate rounded-full border border-zinc-800 px-2.5 py-1 text-[11px] text-zinc-400 transition-colors hover:border-structural/50 hover:text-zinc-200"
+                >
+                  {ex.length > 52 ? `${ex.slice(0, 52)}…` : ex}
+                </button>
+              ))}
+            </div>
           </div>
 
           <div className="flex flex-col gap-2">
-            <label className="text-xs text-zinc-500 uppercase tracking-widest">Asset Context</label>
+            <label htmlFor="assets" className="text-[11px] font-semibold tracking-widest text-zinc-500 uppercase">
+              Asset Context
+            </label>
             <input
-              className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-3 text-sm text-zinc-100 placeholder-zinc-600 focus:outline-none focus:border-zinc-500 transition-colors"
+              id="assets"
+              className="w-full rounded-lg border border-zinc-800 bg-zinc-950/60 px-4 py-3 text-sm text-zinc-100 transition-colors placeholder-zinc-600 focus:border-structural/60 focus:outline-none"
               placeholder="SPY, TLT, GLD"
               value={assetContext}
               onChange={(e) => setAssetContext(e.target.value)}
             />
           </div>
 
-          <div className="flex items-center justify-between">
-            <p className="text-xs text-zinc-600">Pipeline runs 3 agents + NLI contradiction detection. Allow 2–3 minutes.</p>
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <p className="text-xs text-zinc-600">Three agents, then NLI contradiction detection.</p>
             <button
               onClick={handleSubmit}
               disabled={isPending || !event.trim()}
-              className="px-6 py-2.5 bg-zinc-100 text-zinc-900 text-sm font-semibold rounded-lg disabled:opacity-40 disabled:cursor-not-allowed hover:bg-white transition-colors"
+              className="rounded-lg bg-zinc-100 px-6 py-2.5 text-sm font-semibold text-zinc-900 transition-all hover:bg-white disabled:cursor-not-allowed disabled:opacity-40"
             >
               {isPending ? 'Analysing…' : 'Run Analysis'}
             </button>
           </div>
 
           {error && (
-            <p className="text-sm text-red-400">Analysis failed. Check that the backend is running and try again.</p>
+            <p className="inline-flex items-center gap-2 text-sm text-critical">
+              <TriangleAlert size={14} /> Analysis failed. Check the backend is running, then try again.
+            </p>
           )}
         </div>
 
-        {isPending && (
-          <div className="rounded-xl border border-zinc-700/50 bg-zinc-900 p-10 flex flex-col items-center gap-4">
-            <div className="w-8 h-8 border-2 border-zinc-700 border-t-zinc-300 rounded-full animate-spin" />
-            <p className="text-sm text-zinc-500">Agents reasoning independently — this takes 2–3 minutes on CPU…</p>
-          </div>
-        )}
+        {isPending && <Progress />}
 
         {report && !isPending && (
           <>
-            <div className="flex items-center justify-between">
+            <div className="rise">
               <DivergenceBadge type={report.divergence_type} />
             </div>
 
-            <div>
-              <p className="text-xs text-zinc-500 uppercase tracking-widest mb-4">Agent Outputs</p>
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+            <Section
+              title="Agent Outputs"
+              hint={selectedAgent ? 'Click again to clear focus' : 'Click an agent to focus its conflicts'}
+              delay={60}
+            >
+              <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
                 {report.agent_outputs.map((output) => (
-                  <AgentCard key={output.agent} output={output} />
+                  <AgentCard
+                    key={output.agent}
+                    output={output}
+                    selected={selectedAgent === output.agent}
+                    onSelect={() => setSelectedAgent((cur) => (cur === output.agent ? null : output.agent))}
+                  />
                 ))}
               </div>
-            </div>
+            </Section>
 
-            <div>
-              <p className="text-xs text-zinc-500 uppercase tracking-widest mb-4">Contradiction Map</p>
-              <ContradictionMap conflicts={report.key_conflicts} />
-            </div>
+            <Section title="Contradiction Map" hint="Where the reasoning actually collides" delay={120}>
+              <ContradictionMap conflicts={report.key_conflicts} selectedAgent={selectedAgent} />
+            </Section>
 
-            <AssumptionMatrix
-              structural={report.agent_outputs.find(a => a.agent === 'structural')?.explicit_assumptions ?? []}
-              risk={report.agent_outputs.find(a => a.agent === 'risk')?.explicit_assumptions ?? []}
-              contrarian={report.agent_outputs.find(a => a.agent === 'contrarian')?.explicit_assumptions ?? []}
-              conflicts={report.key_conflicts}
-            />
-
-            <div>
-              <p className="text-xs text-zinc-500 uppercase tracking-widest mb-4">Historical Analogues</p>
-              <HistoricalPanel
-                analogues={report.historical_analogues}
-                coverage={report.historical_coverage}
+            <Section title="Assumption Matrix" hint="What each agent took for granted" delay={180}>
+              <AssumptionMatrix
+                structural={agentOf('structural')?.explicit_assumptions ?? []}
+                risk={agentOf('risk')?.explicit_assumptions ?? []}
+                contrarian={agentOf('contrarian')?.explicit_assumptions ?? []}
+                conflicts={report.key_conflicts}
+                challenged={agentOf('contrarian')?.challenged_assumptions ?? []}
+                validated={agentOf('contrarian')?.validated_assumptions ?? []}
               />
-            </div>
+            </Section>
+
+            <Section title="Historical Analogues" hint="Real events, real realised outcomes" delay={240}>
+              <HistoricalPanel analogues={report.historical_analogues} coverage={report.historical_coverage} />
+            </Section>
           </>
         )}
       </div>

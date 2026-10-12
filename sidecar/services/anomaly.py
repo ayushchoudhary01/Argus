@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 import yfinance as yf
 import numpy as np
 
-logger = logging.getLogger("amrs.sidecar.anomaly")
+logger = logging.getLogger("argus.sidecar.anomaly")
 
 
 def get_anomaly_flags() -> list[str]:
@@ -35,5 +35,8 @@ def get_anomaly_flags() -> list[str]:
 
     except Exception:
         logger.exception("Failed to compute anomaly flags")
+        # An empty list would read as "no anomalies found"
+        # so a failed fetch is never mistaken for a clean signal.
+        flags.append("anomaly_check_unavailable")
 
     return flags

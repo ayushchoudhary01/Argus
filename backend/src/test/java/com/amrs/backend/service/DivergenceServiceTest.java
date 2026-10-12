@@ -142,6 +142,24 @@ class DivergenceServiceTest {
     }
 
     @Test
+    void detectionFailure_isInsufficientSignal_notConsensus() {
+        // A failed NLI stage returns an empty map, which would otherwise look
+        // identical to "the agents agree" and upgrade to CONSENSUS_HIGH_CONVICTION.
+        AgentOutput agent3 = okAgent("contrarian", DivergenceAssessment.LOW_VARIANCE);
+        ContradictionMap failed = ContradictionMap.builder()
+                .directionalConflicts(Collections.emptyList())
+                .flaggedTensions(Collections.emptyList())
+                .entailments(Collections.emptyList())
+                .neutralPairs(Collections.emptyList())
+                .detectionFailed(true)
+                .build();
+
+        DivergenceType result = divergenceService.classifyDivergence(agent3, failed);
+
+        assertThat(result).isEqualTo(DivergenceType.INSUFFICIENT_SIGNAL);
+    }
+
+    @Test
     void buildReport_appendsLowHistoricalConfidenceTag_whenCoverageInsufficient() {
         AgentOutput agent1 = okAgent("structural", null);
         AgentOutput agent2 = okAgent("risk", null);

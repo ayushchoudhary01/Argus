@@ -32,6 +32,8 @@ export interface AgentOutput {
   causal_chain?: CausalChain
   explicit_assumptions?: Assumption[]
   key_uncertainties?: string[]
+  challenged_assumptions?: string[]
+  validated_assumptions?: string[]
   status: string
 }
 
@@ -64,7 +66,7 @@ export interface DirectionalConflictItem {
   premise: string
   hypothesis: string
   agents: string[]
-  label: 'DIRECTIONAL_CONFLICT'
+  type: 'DIRECTIONAL_CONFLICT'
   method: 'causal_chain_comparison'
   target_variable: string
 }

@@ -1,6 +1,6 @@
 spring:
   application:
-    name: amrs-orchestrator
+    name: argus-orchestrator
 
   datasource:
     url: jdbc:postgresql://${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}
@@ -27,7 +27,7 @@ spring:
       host: ${REDIS_HOST}
       port: ${REDIS_PORT}
 
-amrs:
+argus:
   sidecar:
     base-url: ${SIDECAR_URL}
   ollama:

@@ -51,6 +51,11 @@ public class DivergenceService {
         boolean hasConflicts = !contradictionMap.getDirectionalConflicts().isEmpty()
                 || !contradictionMap.getFlaggedTensions().isEmpty();
 
+        if (contradictionMap.isDetectionFailed()) {
+            log.warn("Contradiction detection failed — refusing to classify divergence");
+            return DivergenceType.INSUFFICIENT_SIGNAL;
+        }
+
         if (agent3.getStatus() == AgentStatus.DEGRADED || agent3.getDivergenceAssessment() == DivergenceAssessment.DATA_GAP) {
             return DivergenceType.INSUFFICIENT_SIGNAL;
         }
@@ -67,6 +72,9 @@ public class DivergenceService {
             return DivergenceType.EMPHASIS_DISPUTE;
         }
 
+        // Remaining case: the Contrarian reported LOW_VARIANCE but deterministic
+        // detection found conflicts it missed. The two signals disagree, so neither is
+        // trusted — INSUFFICIENT_SIGNAL is deliberate here, not a gap in the branches.
         return DivergenceType.INSUFFICIENT_SIGNAL;
     }
 

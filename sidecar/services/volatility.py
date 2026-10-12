@@ -5,7 +5,7 @@ import yfinance as yf
 
 from models.schemas import VolatilityContext
 
-logger = logging.getLogger("amrs.sidecar.volatility")
+logger = logging.getLogger("argus.sidecar.volatility")
 
 
 def get_volatility_context() -> VolatilityContext:

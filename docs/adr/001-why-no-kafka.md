@@ -4,13 +4,13 @@
 Accepted
 
 ## Context
-AMRS processes market events through a multi-agent reasoning pipeline. The question arose whether an event streaming platform like Apache Kafka should be introduced as the backbone for inter-service communication.
+Argus processes market events through a multi-agent reasoning pipeline. The question arose whether an event streaming platform like Apache Kafka should be introduced as the backbone for inter-service communication.
 
 ## Decision
 Kafka is not used in this system.
 
 ## Reasoning
-Kafka solves one problem well: high-throughput, distributed event streaming across many producers and consumers. AMRS does not have that problem.
+Kafka solves one problem well: high-throughput, distributed event streaming across many producers and consumers. Argus does not have that problem.
 
 This system processes one event at a time, deeply. The pipeline is deliberately sequential in places (Agent 3 must wait for Agents 1 and 2) and the value is in reasoning depth, not throughput. Introducing Kafka would add broker management, topic configuration, consumer group complexity, and serialization overhead with zero engineering justification.
 

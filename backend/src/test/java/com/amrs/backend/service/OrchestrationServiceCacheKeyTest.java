@@ -134,6 +134,6 @@ class OrchestrationServiceCacheKeyTest {
                 .timestamp(Instant.now())
                 .build();
 
-        assertThat(orchestrationService.buildCacheKey(request)).startsWith("amrs:analysis:");
+        assertThat(orchestrationService.buildCacheKey(request)).startsWith("argus:analysis:");
     }
 }

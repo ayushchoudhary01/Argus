@@ -14,10 +14,10 @@ public class OllamaClient {
 
     private final RestClient restClient;
 
-    @Value("${amrs.ollama.base-url}")
+    @Value("${argus.ollama.base-url}")
     private String ollamaBaseUrl;
 
-    @Value("${amrs.ollama.model}")
+    @Value("${argus.ollama.model}")
     private String model;
 
     public OllamaClient(RestClient restClient) {

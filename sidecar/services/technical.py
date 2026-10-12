@@ -5,7 +5,7 @@ import yfinance as yf
 
 from models.schemas import TechnicalContext
 
-logger = logging.getLogger("amrs.sidecar.technical")
+logger = logging.getLogger("argus.sidecar.technical")
 
 
 def get_technical_context() -> TechnicalContext:

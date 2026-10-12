@@ -7,7 +7,7 @@ from qdrant_client import QdrantClient
 
 from models.schemas import DataQuality, EventOutcome, HistoricalAnalogue, HistoricalCoverage
 
-logger = logging.getLogger("amrs.sidecar.historical")
+logger = logging.getLogger("argus.sidecar.historical")
 
 QDRANT_COLLECTION = "market_events"
 EMBED_MODEL = "nomic-embed-text"

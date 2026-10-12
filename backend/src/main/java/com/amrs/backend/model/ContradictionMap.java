@@ -26,4 +26,7 @@ public class ContradictionMap {
 
     @JsonProperty("neutral_pairs")
     private List<Object> neutralPairs;
+
+    @JsonProperty("detection_failed")
+    private boolean detectionFailed;
 }

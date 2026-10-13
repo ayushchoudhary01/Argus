@@ -8,8 +8,11 @@ ready to use — but nothing in the codebase calls it. There is exactly one endp
 
 ## Idea
 Add `GET /api/v1/analysis/{correlationId}` to retrieve a previously generated report.
-Each analysis response already includes enough context that a correlationId could be
-surfaced to the frontend and used to revisit past results without re-running the pipeline.
+
+The prerequisite is now in place: `DivergenceReport` returns `correlation_id`, and
+failures return the same id via `ErrorResponse`, so a client always knows which run it is
+holding. Previously neither did, which made a lookup-by-id endpoint unusable in practice —
+there was no way for a caller to ever learn the id to look up.
 
 ## Why It's Deferred, Not a Bug
 The core demo value — submit an event, get a divergence analysis — doesn't depend on
@@ -19,8 +22,8 @@ or search past analyses, possibly pagination. It's scoped as an addition, not a 
 ## What It Would Take
 - New `@GetMapping` route on `AnalysisController`
 - Decide what's returned if the correlationId doesn't exist — 404 vs empty response
-- Frontend: surface correlationId after analysis, add a way to revisit past reports
-  (history list, URL-based deep link, etc.)
+- Frontend: the id is already in the response payload and rendered on failure; a history
+  view would need a list or URL-based deep link to revisit past reports
 
 ## Status
 Not started. Known, intentional gap — documented here so it's a deliberate decision

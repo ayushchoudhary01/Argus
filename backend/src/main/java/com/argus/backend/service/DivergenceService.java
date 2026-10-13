@@ -36,6 +36,7 @@ public class DivergenceService {
         }
 
         return DivergenceReport.builder()
+                .correlationId(correlationId)
                 .divergenceType(divergenceType)
                 .primaryThesis(agent1.getThesis())
                 .strongestCounterThesis(agent3.getThesis())

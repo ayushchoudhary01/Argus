@@ -75,6 +75,7 @@ export interface DirectionalConflictItem {
 export type KeyConflict = FlaggedTensionConflict | DirectionalConflictItem
 
 export interface DivergenceReport {
+  correlation_id?: string
   divergence_type: DivergenceType
   primary_thesis: string
   strongest_counter_thesis: string

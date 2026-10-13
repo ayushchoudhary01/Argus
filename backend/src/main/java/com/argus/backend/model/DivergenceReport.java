@@ -18,6 +18,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class DivergenceReport {
 
+    /** Returned so a successful run is as traceable as a failed one, and so a client can
+     *  later request this report by id. Errors already carry it via ErrorResponse. */
+    @JsonProperty("correlation_id")
+    private String correlationId;
+
     @JsonProperty("agent_outputs")
     private List<AgentOutput> agentOutputs;
 

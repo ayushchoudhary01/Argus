@@ -153,6 +153,22 @@ export default function AgentCard({ output, selected, onSelect }: Props) {
           </div>
         )}
 
+        {(output.historical_refs?.length ?? 0) > 0 && (
+          <div className="flex flex-col gap-2">
+            <p className="text-[10px] font-semibold tracking-widest text-zinc-600 uppercase">Leaned On</p>
+            <div className="flex flex-wrap gap-1.5">
+              {output.historical_refs?.map((ref, i) => (
+                <span
+                  key={i}
+                  className="rounded border border-zinc-800 bg-zinc-800/40 px-2 py-0.5 text-[11px] text-zinc-400"
+                >
+                  {ref}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+
         {(output.key_uncertainties?.length ?? 0) > 0 && (
           <div className="flex flex-col gap-1.5 border-t border-zinc-800 pt-4">
             <p className="text-[10px] font-semibold tracking-widest text-zinc-600 uppercase">Uncertainties</p>

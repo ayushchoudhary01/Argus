@@ -26,6 +26,24 @@ public class AgentService {
     private final AgentOutputValidator validator;
     private final ObjectMapper objectMapper;
 
+    // Appended verbatim on the single retry. Structural and Risk share the full contract
+    // reminder; the Contrarian's schema has no length invariant, so it only needs the
+    // JSON-only instruction.
+    private static final String STRICT_CONTRACT = """
+            
+            STRICT MODE: Your previous response failed validation.
+            You MUST include at least 3 items in reasoning_chain.
+            You MUST include at least 1 item in explicit_assumptions.
+            reasoning_chain length MUST be >= explicit_assumptions length.
+            Return ONLY the JSON object. No markdown. No explanation.
+            """;
+
+    private static final String STRICT_JSON_ONLY = """
+            
+            STRICT MODE: Your previous response failed validation.
+            Return ONLY the JSON object. No markdown. No explanation.
+            """;
+
     public AgentOutput runStructuralAgent(MarketContext marketContext, EventRequest request) {
         String prompt = buildStructuralPrompt(marketContext, request);
         return executeWithRetry("structural", prompt, buildStricterStructuralPrompt(marketContext, request));
@@ -126,14 +144,7 @@ public class AgentService {
     }
 
     private String buildStricterStructuralPrompt(MarketContext ctx, EventRequest request) {
-        return buildStructuralPrompt(ctx, request) + """
-                
-                STRICT MODE: Your previous response failed validation.
-                You MUST include at least 3 items in reasoning_chain.
-                You MUST include at least 1 item in explicit_assumptions.
-                reasoning_chain length MUST be >= explicit_assumptions length.
-                Return ONLY the JSON object. No markdown. No explanation.
-                """;
+        return buildStructuralPrompt(ctx, request) + STRICT_CONTRACT;
     }
 
     private String buildRiskPrompt(MarketContext ctx, EventRequest request) {
@@ -181,14 +192,7 @@ public class AgentService {
     }
 
     private String buildStricterRiskPrompt(MarketContext ctx, EventRequest request) {
-        return buildRiskPrompt(ctx, request) + """
-                
-                STRICT MODE: Your previous response failed validation.
-                You MUST include at least 3 items in reasoning_chain.
-                You MUST include at least 1 item in explicit_assumptions.
-                reasoning_chain length MUST be >= explicit_assumptions length.
-                Return ONLY the JSON object. No markdown. No explanation.
-                """;
+        return buildRiskPrompt(ctx, request) + STRICT_CONTRACT;
     }
 
     private String buildContrarianPrompt(AgentContext ctx) {
@@ -252,11 +256,7 @@ public class AgentService {
     }
 
     private String buildStricterContrarianPrompt(AgentContext ctx) {
-        return buildContrarianPrompt(ctx) + """
-                
-                STRICT MODE: Your previous response failed validation.
-                Return ONLY the JSON object. No markdown. No explanation.
-                """;
+        return buildContrarianPrompt(ctx) + STRICT_JSON_ONLY;
     }
 
     private String formatHistoricalAnalogues(List<HistoricalAnalogue> analogues) {

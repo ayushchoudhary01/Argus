@@ -2,7 +2,6 @@ import logging
 from datetime import datetime, timedelta
 
 import yfinance as yf
-import numpy as np
 
 logger = logging.getLogger("argus.sidecar.anomaly")
 

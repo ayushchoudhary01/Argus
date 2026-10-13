@@ -117,6 +117,10 @@ Every non-obvious choice in this system was deliberate. Full reasoning lives in 
 
 Agents generate their own `explicit_assumptions`. The quality of those assumptions depends on the quality of the underlying model — this is a genuine limitation, not fully solvable without replacing the LLM layer entirely. Contract enforcement (retry-once-then-degrade) and Agent 3's cross-challenging reduce the risk. They don't eliminate it.
 
+**The Contrarian Agent does not take its escape hatch.** Across five analysed events — including an overnight failure of a top-five bank, which has one obvious reading — it returned `SUBSTANTIVE` every time, never `LOW_VARIANCE` or `DATA_GAP`. This is precisely the failure the escape hatch exists to prevent. The consequence is narrower than it first appears: `CONSENSUS_HIGH_CONVICTION` requires `LOW_VARIANCE`, so it is never produced under the current prompt, and the `DATA_GAP` route into `INSUFFICIENT_SIGNAL` goes unused. The other three types all occur — `INSUFFICIENT_SIGNAL` is still reached when contradiction detection fails, when Agent 3 degrades, or when its verdict contradicts the deterministic evidence.
+
+Four prompt variants were tested against this. Each collapsed to a near-uniform verdict decided by the prompt's structure rather than by the event being judged; two variants differing only in tone behaved identically, which rules out framing as the cause. The conclusion is that a 9B model is not performing this judgement at all, so the fix is architectural — move the assessment out of the agent and derive it from the conflict evidence the system already computes. Documented in [`docs/future-improvements/002`](./docs/future-improvements/002-fine-tuned-financial-models.md).
+
 A system that doesn't acknowledge this isn't being rigorous — it's overselling.
 
 ---

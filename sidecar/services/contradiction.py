@@ -6,9 +6,7 @@ from transformers import pipeline
 from models.schemas import (
     Assumption,
     CausalChain,
-    ConflictType,
     ContradictionMap,
-    DetectionMethod,
     DirectionalConflict,
     FlaggedTension,
 )

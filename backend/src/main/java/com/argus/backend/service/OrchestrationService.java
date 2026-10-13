@@ -32,6 +32,18 @@ public class OrchestrationService {
 
     public DivergenceReport analyse(EventRequest request) {
         String correlationId = UUID.randomUUID().toString();
+        try {
+            return runPipeline(request, correlationId);
+        } catch (PipelineException e) {
+            // Clients throw before the run's id is in scope. Stamp the real one here so
+            // the caller receives something they can correlate against the logs.
+            throw PipelineException.UNKNOWN.equals(e.getCorrelationId())
+                    ? new PipelineException(e.getMessage(), correlationId)
+                    : e;
+        }
+    }
+
+    private DivergenceReport runPipeline(EventRequest request, String correlationId) {
         log.info("Pipeline start [correlationId={}] event='{}'", correlationId, request.getEvent());
 
         String cacheKey = buildCacheKey(request);

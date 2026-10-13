@@ -11,10 +11,44 @@ import AssumptionMatrix from './components/AssumptionMatrix'
 
 const queryClient = new QueryClient()
 
-const EXAMPLES = [
-  'US CPI prints 3.8% vs 3.4% forecast. ISM Manufacturing drops to 46.2.',
-  'Fed holds rates but removes further tightening language from the statement.',
-  'Ten-year yield jumps 40bp in two sessions on a failed Treasury auction.',
+/** The backend returns {error, message, correlation_id} on failure — surface the id so a
+ *  failed run can be traced to its logs and its persisted report. */
+function errorBody(err: unknown): { message?: string; correlation_id?: string } | undefined {
+  const data = (err as { response?: { data?: unknown } })?.response?.data
+  return data && typeof data === 'object' ? (data as { message?: string; correlation_id?: string }) : undefined
+}
+
+// Each sample is chosen to push the pipeline down a different path. The agents are
+// non-deterministic, so these bias toward an outcome rather than guarantee one — the
+// label names the scenario, not a promised verdict.
+type Example = { label: string; probes: string; event: string }
+
+const EXAMPLES: Example[] = [
+  {
+    label: 'Opposing rate paths',
+    probes: 'Two plausible opposite readings of the same statement. When the agents happen to name the same target variable, the deterministic causal-chain check fires before NLI runs.',
+    event: 'Fed holds rates but removes further tightening language from the statement.',
+  },
+  {
+    label: 'Stagflationary print',
+    probes: 'Growth and inflation pulling opposite ways, so the agents tend to emphasise different risks.',
+    event: 'US CPI prints 3.8% vs 3.4% forecast. ISM Manufacturing drops to 46.2.',
+  },
+  {
+    label: 'Systemic shock',
+    probes: 'One unambiguous reading. The Contrarian still reports substantive disagreement rather than taking its LOW_VARIANCE escape hatch - see Honest Limitations in the README.',
+    event: 'A top-five US bank fails overnight. Interbank lending freezes and the Fed opens an emergency liquidity facility.',
+  },
+  {
+    label: 'Thin print',
+    probes: 'Almost no information to reason from. The agents still construct theses rather than reporting DATA_GAP.',
+    event: 'Durable goods orders revised down 0.1% from the prior month initial estimate.',
+  },
+  {
+    label: 'Outside the corpus',
+    probes: 'Nothing in the 1977-2023 macro seed set is genuinely close, yet retrieval still reports SUFFICIENT at 0.61-0.62 similarity - the 0.60 threshold is too permissive.',
+    event: 'A major stablecoin depegs and the largest DeFi lending protocols halt withdrawals.',
+  },
 ]
 
 // The pipeline runs three sequential LLM calls on CPU, so a bare spinner leaves
@@ -133,7 +167,7 @@ function Dashboard() {
               id="event"
               className="w-full resize-none rounded-lg border border-zinc-800 bg-zinc-950/60 px-4 py-3 text-sm text-zinc-100 transition-colors placeholder-zinc-600 focus:border-structural/60 focus:outline-none"
               rows={3}
-              placeholder={EXAMPLES[0]}
+              placeholder={EXAMPLES[0].event}
               value={event}
               onChange={(e) => setEvent(e.target.value)}
             />
@@ -141,14 +175,21 @@ function Dashboard() {
               <span className="inline-flex items-center gap-1 text-[11px] text-zinc-600">
                 <Sparkles size={11} /> Try
               </span>
-              {EXAMPLES.map((ex, i) => (
+              {EXAMPLES.map((ex) => (
                 <button
-                  key={i}
+                  key={ex.label}
                   type="button"
-                  onClick={() => setEvent(ex)}
-                  className="max-w-full truncate rounded-full border border-zinc-800 px-2.5 py-1 text-[11px] text-zinc-400 transition-colors hover:border-structural/50 hover:text-zinc-200"
+                  onClick={() => setEvent(ex.event)}
+                  title={`${ex.event}
+
+${ex.probes}`}
+                  className={`rounded-full border px-2.5 py-1 text-[11px] transition-colors ${
+                    event === ex.event
+                      ? 'border-structural/60 bg-structural/10 text-zinc-200'
+                      : 'border-zinc-800 text-zinc-400 hover:border-structural/50 hover:text-zinc-200'
+                  }`}
                 >
-                  {ex.length > 52 ? `${ex.slice(0, 52)}…` : ex}
+                  {ex.label}
                 </button>
               ))}
             </div>
@@ -168,7 +209,7 @@ function Dashboard() {
           </div>
 
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <p className="text-xs text-zinc-600">Three agents, then NLI contradiction detection.</p>
+            <p className="text-xs text-zinc-600">Three agents, then NLI contradiction detection. No temperature or seed is set, so the same event can classify differently between runs.</p>
             <button
               onClick={handleSubmit}
               disabled={isPending || !event.trim()}
@@ -179,9 +220,17 @@ function Dashboard() {
           </div>
 
           {error && (
-            <p className="inline-flex items-center gap-2 text-sm text-critical">
-              <TriangleAlert size={14} /> Analysis failed. Check the backend is running, then try again.
-            </p>
+            <div className="flex flex-col gap-1 rounded-lg border border-critical/30 bg-critical/5 p-3">
+              <p className="inline-flex items-center gap-2 text-sm text-critical">
+                <TriangleAlert size={14} />
+                {errorBody(error)?.message ?? 'Analysis failed. Check the backend is running, then try again.'}
+              </p>
+              {errorBody(error)?.correlation_id && (
+                <p className="font-mono text-[11px] text-zinc-500">
+                  correlation_id: {errorBody(error)?.correlation_id}
+                </p>
+              )}
+            </div>
           )}
         </div>
 

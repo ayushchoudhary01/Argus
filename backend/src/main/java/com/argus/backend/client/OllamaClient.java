@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
+import org.springframework.web.client.RestClientException;
 
 @Component
 @Slf4j
@@ -29,18 +30,24 @@ public class OllamaClient {
 
         log.info("Calling Ollama model={}", model);
 
-        OllamaResponse response = restClient.post()
+        OllamaResponse response;
+        try {
+            response = restClient.post()
                 .uri(ollamaBaseUrl + "/api/generate")
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(request)
                 .retrieve()
                 .onStatus(HttpStatusCode::isError, (req, res) -> {
-                    throw new PipelineException("Ollama call failed with status: " + res.getStatusCode(), "unknown");
+                    throw new PipelineException("Ollama call failed with status: " + res.getStatusCode(), PipelineException.UNKNOWN);
                 })
                 .body(OllamaResponse.class);
+        } catch (RestClientException e) {
+            throw new PipelineException("Ollama unreachable: " + e.getMessage(),
+                    PipelineException.UNKNOWN);
+        }
 
         if (response == null || response.getResponse() == null) {
-            throw new PipelineException("Ollama returned empty response", "unknown");
+            throw new PipelineException("Ollama returned empty response", PipelineException.UNKNOWN);
         }
 
         String raw = response.getResponse().strip();

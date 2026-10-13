@@ -31,6 +31,7 @@ export interface AgentOutput {
   reasoning_chain?: string[]
   causal_chain?: CausalChain
   explicit_assumptions?: Assumption[]
+  historical_refs?: string[]
   key_uncertainties?: string[]
   challenged_assumptions?: string[]
   validated_assumptions?: string[]
